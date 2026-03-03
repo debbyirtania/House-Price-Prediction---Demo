@@ -66,45 +66,10 @@ uvicorn src.app:app --reload --host 0.0.0.0 --port 8000
 
 ### Step 6 - Akses lokal
 
-- UI: `http://localhost:8000/`
-- Swagger: `http://localhost:8000/docs`
+Ex: "http://0.0.0.0:8000"
+## Web Deployment (Render)
+https://house-price-prediction-demo-1.onrender.com/
 
-## Deploy ke Render (Tanpa ngrok)
-
-### Prasyarat
-
-1. Project sudah di-push ke GitHub.
-2. File model tersedia di repo:
-- `artifacts/model/xgboost_harga_rumah.joblib`
-- `artifacts/model/metadata.json`
-
-### Opsi A - Deploy via `render.yaml` (direkomendasikan)
-
-1. Buka Render -> New -> Blueprint.
-2. Pilih repo GitHub project ini.
-3. Render akan membaca `render.yaml` otomatis.
-4. Tunggu deploy selesai, lalu buka URL publik Render.
-
-Catatan kompatibilitas:
-- Project ini dipin ke Python `3.11` melalui file `runtime.txt` agar dependency data science (pandas/xgboost) stabil saat build di Render.
-
-### Opsi B - Deploy manual di dashboard Render
-
-1. Render -> New -> Web Service.
-2. Connect ke repo GitHub kamu.
-3. Isi konfigurasi:
-- Runtime: `Python`
-- Build Command: `pip install -r requirements.txt`
-- Start Command: `uvicorn src.app:app --host 0.0.0.0 --port $PORT`
-4. Deploy.
-
-Setelah live:
-- UI: `https://<nama-service>.onrender.com/`
-- Swagger: `https://<nama-service>.onrender.com/docs`
-
-Catatan:
-- Di free plan Render, service bisa sleep saat idle.
-- Berbeda dengan ngrok, URL Render tetap (lebih cocok untuk demo publik jangka panjang).
 
 ## Test Endpoint
 
@@ -128,5 +93,3 @@ curl -X POST "http://127.0.0.1:8000/predict" \
   "jarak_ke_pusat_kota": 6.5
 }'
 ```
-### Open Via Website ngrok
-https://bossily-expressible-whitley.ngrok-free.dev/
