@@ -85,6 +85,9 @@ uvicorn src.app:app --reload --host 0.0.0.0 --port 8000
 3. Render akan membaca `render.yaml` otomatis.
 4. Tunggu deploy selesai, lalu buka URL publik Render.
 
+Catatan kompatibilitas:
+- Project ini dipin ke Python `3.11` melalui file `runtime.txt` agar dependency data science (pandas/xgboost) stabil saat build di Render.
+
 ### Opsi B - Deploy manual di dashboard Render
 
 1. Render -> New -> Web Service.
