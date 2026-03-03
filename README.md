@@ -1,0 +1,99 @@
+# End-to-End Prediksi Harga Rumah (XGBoost + FastAPI)
+
+Project ini mencakup:
+1. Pembuatan data dummy untuk train/test.
+2. Training model XGBoost + hyperparameter tuning untuk mengurangi overfitting.
+3. Deployment inference lokal menggunakan FastAPI.
+
+## Struktur Folder
+
+```bash
+.
+├── artifacts/
+│   ├── data/
+│   └── model/
+├── src/
+│   ├── app.py
+│   ├── generate_data.py
+│   └── train.py
+├── requirements.txt
+└── README.md
+```
+
+## Step-by-Step Eksekusi
+
+### Step 1 - Buat virtual environment (opsional tapi disarankan)
+
+```bash
+python -m venv .venv
+source .venv/bin/activate  # macOS/Linux
+```
+
+### Step 2 - Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### Step 3 - Generate dummy data train & test
+
+```bash
+python src/generate_data.py
+```
+
+Output:
+- `artifacts/data/train.csv`
+- `artifacts/data/test.csv`
+
+### Step 4 - Training + tuning XGBoost
+
+```bash
+python src/train.py
+```
+
+Output:
+- Menampilkan `best_params` hasil tuning.
+- Menampilkan metrik train vs test (RMSE/MAE/R2) untuk cek overfitting.
+- Menyimpan model ke `artifacts/model/xgboost_harga_rumah.joblib`
+- Menyimpan metadata ke `artifacts/model/metadata.json`
+
+### Step 5 - Jalankan FastAPI lokal
+
+```bash
+uvicorn src.app:app --reload --host 127.0.0.1 --port 8000
+```
+
+### Step 6 - Test endpoint
+
+Cek health:
+
+```bash
+curl http://127.0.0.1:8000/health
+```
+
+Prediksi harga rumah:
+
+```bash
+curl -X POST "http://127.0.0.1:8000/predict" \
+-H "Content-Type: application/json" \
+-d '{
+  "luas_bangunan": 150,
+  "luas_tanah": 210,
+  "jumlah_kamar": 4,
+  "jumlah_kamar_mandi": 3,
+  "usia_rumah": 8,
+  "jarak_ke_pusat_kota": 6.5
+}'
+```
+
+## Catatan Menghindari Overfitting
+
+Di `src/train.py`, overfitting ditekan dengan:
+- Hyperparameter tuning (`RandomizedSearchCV`) pada `max_depth`, `min_child_weight`, `subsample`, `colsample_bytree`, `gamma`, `reg_alpha`, `reg_lambda`.
+- Validasi silang (`cv=3`) saat tuning.
+- Evaluasi metrik train vs test dan `overfit_gap_rmse`.
+
+Jika gap train-test masih besar, kurangi kompleksitas model:
+- Turunkan `max_depth`.
+- Naikkan `min_child_weight`, `reg_alpha`, `reg_lambda`, atau `gamma`.
+- Turunkan `subsample`/`colsample_bytree`.

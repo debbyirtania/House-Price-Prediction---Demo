@@ -1,0 +1,31 @@
+{
+  "features": [
+    "luas_bangunan",
+    "luas_tanah",
+    "jumlah_kamar",
+    "jumlah_kamar_mandi",
+    "usia_rumah",
+    "jarak_ke_pusat_kota"
+  ],
+  "target": "harga_rumah",
+  "metrics": {
+    "train_rmse": 147129131.68988192,
+    "test_rmse": 176664633.1547412,
+    "train_mae": 115720940.16925626,
+    "test_mae": 138555641.09582,
+    "train_r2": 0.9090879594256519,
+    "test_r2": 0.871857826005863,
+    "overfit_gap_rmse": 29535501.464859277,
+    "best_params": {
+      "subsample": 0.8,
+      "reg_lambda": 1,
+      "reg_alpha": 0,
+      "n_estimators": 500,
+      "min_child_weight": 1,
+      "max_depth": 3,
+      "learning_rate": 0.05,
+      "gamma": 0.2,
+      "colsample_bytree": 0.6
+    }
+  }
+}
