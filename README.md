@@ -61,12 +61,12 @@ Output:
 ### Step 5 - Jalankan FastAPI lokal
 
 ```bash
-uvicorn src.app:app --reload --host 0.0.0.0 --port 8000
+uvicorn src.app:app --host 127.0.0.1 --port 8000
 ```
 
 ### Step 6 - Akses lokal
 
-Ex: "http://0.0.0.0:8000"
+Ex: "http://127.0.0.1:8000/"
 ## Web Deployment (Render)
 https://house-price-prediction-demo-1.onrender.com/
 
