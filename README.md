@@ -3,7 +3,7 @@
 Project ini mencakup:
 1. Pembuatan data dummy untuk train/test.
 2. Training model XGBoost + hyperparameter tuning untuk mengurangi overfitting.
-3. Deployment inference lokal menggunakan FastAPI.
+3. Deployment inference menggunakan FastAPI (lokal + Render).
 
 ## Struktur Folder
 
@@ -16,13 +16,14 @@ Project ini mencakup:
 │   ├── app.py
 │   ├── generate_data.py
 │   └── train.py
+├── render.yaml
 ├── requirements.txt
 └── README.md
 ```
 
-## Step-by-Step Eksekusi
+## Step-by-Step Eksekusi Lokal
 
-### Step 1 - Buat virtual environment (opsional tapi disarankan)
+### Step 1 - Buat virtual environment
 
 ```bash
 python -m venv .venv
@@ -60,10 +61,49 @@ Output:
 ### Step 5 - Jalankan FastAPI lokal
 
 ```bash
-uvicorn src.app:app --reload --host 127.0.0.1 --port 8000
+uvicorn src.app:app --reload --host 0.0.0.0 --port 8000
 ```
 
-### Step 6 - Test endpoint
+### Step 6 - Akses lokal
+
+- UI: `http://localhost:8000/`
+- Swagger: `http://localhost:8000/docs`
+
+## Deploy ke Render (Tanpa ngrok)
+
+### Prasyarat
+
+1. Project sudah di-push ke GitHub.
+2. File model tersedia di repo:
+- `artifacts/model/xgboost_harga_rumah.joblib`
+- `artifacts/model/metadata.json`
+
+### Opsi A - Deploy via `render.yaml` (direkomendasikan)
+
+1. Buka Render -> New -> Blueprint.
+2. Pilih repo GitHub project ini.
+3. Render akan membaca `render.yaml` otomatis.
+4. Tunggu deploy selesai, lalu buka URL publik Render.
+
+### Opsi B - Deploy manual di dashboard Render
+
+1. Render -> New -> Web Service.
+2. Connect ke repo GitHub kamu.
+3. Isi konfigurasi:
+- Runtime: `Python`
+- Build Command: `pip install -r requirements.txt`
+- Start Command: `uvicorn src.app:app --host 0.0.0.0 --port $PORT`
+4. Deploy.
+
+Setelah live:
+- UI: `https://<nama-service>.onrender.com/`
+- Swagger: `https://<nama-service>.onrender.com/docs`
+
+Catatan:
+- Di free plan Render, service bisa sleep saat idle.
+- Berbeda dengan ngrok, URL Render tetap (lebih cocok untuk demo publik jangka panjang).
+
+## Test Endpoint
 
 Cek health:
 
