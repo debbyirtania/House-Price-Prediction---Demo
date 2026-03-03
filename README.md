@@ -85,15 +85,5 @@ curl -X POST "http://127.0.0.1:8000/predict" \
   "jarak_ke_pusat_kota": 6.5
 }'
 ```
-
-## Catatan Menghindari Overfitting
-
-Di `src/train.py`, overfitting ditekan dengan:
-- Hyperparameter tuning (`RandomizedSearchCV`) pada `max_depth`, `min_child_weight`, `subsample`, `colsample_bytree`, `gamma`, `reg_alpha`, `reg_lambda`.
-- Validasi silang (`cv=3`) saat tuning.
-- Evaluasi metrik train vs test dan `overfit_gap_rmse`.
-
-Jika gap train-test masih besar, kurangi kompleksitas model:
-- Turunkan `max_depth`.
-- Naikkan `min_child_weight`, `reg_alpha`, `reg_lambda`, atau `gamma`.
-- Turunkan `subsample`/`colsample_bytree`.
+### Open Via Website ngrok
+https://bossily-expressible-whitley.ngrok-free.dev/
